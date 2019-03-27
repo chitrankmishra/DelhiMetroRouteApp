@@ -399,16 +399,14 @@ int main()
     fin.open("node_values_new.txt");
 /*     while (fin) {
 
-        // Read a Line from File
-        getline(fin, line);
+        getline(fin, line);                                     // Read a Line from File
 
-        // Print line in Console
-        cout << line << endl;
+        cout << line << endl;                                   // Print line in Console
     }
 */
-    for(int i=0;i<248;i++)
+    for(int i=0;i<V;i++)
     {
-       for(int j=0;j<248;j++)
+       for(int j=0;j<V;j++)
         graph[i][j]=0;
     }
     for(int i=1;i<=V;i++)
