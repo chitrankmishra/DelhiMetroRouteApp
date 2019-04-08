@@ -10,6 +10,10 @@
 #include<windows.h>
 using namespace std;
 const int V=248;
+struct node1
+    {
+        vector <float>p;
+    }P[V];
 struct station_code
 {
     string name;
@@ -18,11 +22,6 @@ struct station_code
 };
 struct station_code station[V];
 float graph[V][V];
-
-struct node1
-    {
-        vector <float>p;
-    }P[V];
 string makecapital(string str)
 {
     for(int i=0;i<str.length();i++)
