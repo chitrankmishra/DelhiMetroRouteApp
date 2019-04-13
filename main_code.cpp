@@ -31,6 +31,114 @@ string makecapital(string str)
     }
     return str;
 }
+void Path(float dist,int e,int st)
+{
+    int t=e,s;
+    gotoxy(16,11);
+    cout<<"THE SHORTEST PATH IS : ";
+
+    int pos_x=12;
+    int pos_y=15;
+    vector <int> path;
+    path.push_back(t);
+    while(t!=st)
+    {
+        s=P[t].p.size();
+        t=P[t].p[s-1];
+        path.push_back(t);
+    }
+    vector <int>::iterator i=path.end();
+    string str;
+    string color;
+    gotoxy(44,13);
+    cout<<"****** LOADING ******";
+    delay(2000);
+    gotoxy(42,13);
+    cout<<"****** ROUTE FOUND ******";
+    vector<int>::iterator i2=path.end();
+    i2--;
+    int n_of_stations=0;
+    while(i!=path.begin())
+    {
+        i--;
+        color=station[*i].color;
+        if(color=="BLUE")
+            system("color 09");
+        else if(color=="YELLOW")
+            system("color 06");
+        else if(color=="PINK")
+            system("color 0D");
+        else if(color=="RED")
+            system("color 04");
+        else if(color=="MAGENTA")
+            system("color 05");
+        else if(color=="VOILET")
+            system("color 01");
+        else if(color=="GREEN")
+            system("color 02");
+        else if(color=="AQUA")
+            system("color 03");
+        else if(color=="ORANGE")
+            system("color 0C");
+
+        if(i!=i2)
+        {
+        if(station[*(i2)].color!=station[*(i)].color)
+        {
+            pos_x=8;
+            pos_y++;
+            gotoxy(pos_x,pos_y);
+            cout<<"{change from "<<station[*i2].color<<" to "<<station[*i].color<<"}";
+            pos_x=12;
+            pos_y++;
+            gotoxy(pos_x,pos_y);
+        }
+        i2--;
+        }
+        str=station[*i].name;
+        if(pos_x+5+str.size()<106)
+        {
+            gotoxy(pos_x,pos_y);
+            cout<<" ->> "<<str;
+            pos_x=pos_x+str.size()+5;
+        }
+        else
+        {
+            pos_x=12;
+            pos_y++;
+            gotoxy(pos_x,pos_y);
+            cout<<" ->> "<<str;
+            pos_x=pos_x+str.size()+5;
+        }
+        n_of_stations++;
+        delay(700);
+    }
+    delay(1000);
+    gotoxy(72,11);
+    cout<<"PATH LENGTH IS : "<<dist<<" KM";
+    delay(1000);
+    gotoxy(16,10);
+    cout<<"AVERAGE TIME : "<<timetaken(dist)<<" MIN";
+    delay(1000);
+    gotoxy(72,10);
+    cout<<"AVERAGE FARE : Rs. "<<money(dist);
+    delay(1000);
+    gotoxy(72,12);
+    cout<<"NO OF STATIONS : "<<n_of_stations-1;
+
+    delay(2500);
+    gotoxy(44,8);
+    cout<<"WANT TO SEARCH AGAIN ?  ";
+    string choice;
+    cin>>choice;
+    choice=makecapital(choice);
+    if(choice=="Y"||choice=="YES")
+        secondWindow();
+    gotoxy(5,30);
+    char ch;
+    scanf("%c",&ch);
+    cout<<endl;
+}
 
 
 void dijkstra(float graph[V][V], int src,int targ)
