@@ -10,10 +10,6 @@
 #include<windows.h>
 using namespace std;
 const int V=248;
-struct node1
-    {
-        vector <float>p;
-    }P[V];
 struct station_code
 {
     string name;
@@ -22,6 +18,11 @@ struct station_code
 };
 struct station_code station[V];
 float graph[V][V];
+
+struct node1
+    {
+        vector <float>p;
+    }P[V];
 string makecapital(string str)
 {
     for(int i=0;i<str.length();i++)
@@ -31,6 +32,32 @@ string makecapital(string str)
     }
     return str;
 }
+void drawbox(int, int, int, int, int);
+void secondWindow();
+void clrscreen();
+void delay(unsigned int ms);
+void gotoxy(int x,int y);
+int timetaken(float dist);
+int money(float dist);
+void Details(int t);
+void Path(float dist,int e,int st);
+int minDistance(float dist[], bool sptSet[]);
+void dijkstra(float graph[V][V], int src,int targ);
+int printSolution(float dist[], int n,int src,int temp);
+void take_input();
+void logo(int x, int y);
+void secondWindow();
+void UI();
+
+COORD coord;
+void clrscreen()
+{
+    system("cls");
+    drawbox(1,0,117,29,0);
+}
+
+
+
 void Path(float dist,int e,int st)
 {
     int t=e,s;
