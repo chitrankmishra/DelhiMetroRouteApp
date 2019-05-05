@@ -31,6 +31,75 @@ string makecapital(string str)
     }
     return str;
 }
+void delay(unsigned int ms)
+{
+    clock_t goal=ms+clock();
+    while(goal>clock());
+}
+
+void gotoxy(int x,int y)
+{
+  coord.X=x;
+  coord.Y=y;
+  SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coord);
+}
+
+void drawbox(int x1, int y1, int x2, int y2, int d)
+{
+    gotoxy(x1,y1);
+    printf("+");
+    delay(d);
+    gotoxy(x2,y2);
+    printf("+");
+    delay(d);
+    int i;
+    for(i=1;i<x2-x1;i++)
+    {   gotoxy(x1+i,y1);
+        printf("-");
+        printf("\a");
+        delay(d);
+        gotoxy(x2-i,y2);
+        printf("-");
+        delay(d);
+    }
+    gotoxy(x1,y2);
+    printf("+");
+    gotoxy(x2,y1);
+    printf("+");
+    int j;
+    for(j=1;j<y2-y1;j++)
+        {
+            gotoxy(x2,y1+j);
+            printf("|");
+            delay(d);
+            gotoxy(x1,y2-j);
+            printf("|");
+            delay(d);
+        }
+}
+
+int timetaken(float dist)
+{
+    float speed=0.55;
+    return ceil(dist/speed);
+}
+
+int money(float dist)
+{
+    if(dist<=2)
+        return 10;
+    else if(dist>2&&dist<=5)
+        return 20;
+    else if(dist>5&&dist<=12)
+        return 30;
+    else if(dist>12&&dist<=21)
+        return 40;
+    else if(dist>21&&dist<=32)
+        return 50;
+    else
+        return 60;
+}
+
 void Path(float dist,int e,int st)
 {
     int t=e,s;
