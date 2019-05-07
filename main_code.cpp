@@ -356,7 +356,7 @@ void take_input()
 
         int startcode,endcode,intercode=-1;
         int startflag=0,endflag=0,interflag1=0,interflag2=0;
-        if(inter_s!="NO")
+        if(inter_s!="NO"||inter_s!="N")
           interflag1=1;
         for(int i=0;i<248;i++)
         {
