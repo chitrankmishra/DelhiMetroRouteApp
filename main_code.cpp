@@ -536,4 +536,8 @@ int main()
     UI();
     //secondWindow();
     //take_input(graph);
+     /*Uncomment UI for accessing the introductory slide 
+      uncomment secondWindow and comment UI for debugging from the input part
+      This code is a private property of Chitrank Mishra. All Rights Reserved.
+      Understanding of the code is a necessacity before making any changes.*/
 }
