@@ -239,7 +239,7 @@ void Path(float d,int e,int st,int inter)
     gotoxy(72,10);
     cout<<"AVERAGE FARE : ";
     gotoxy(94,10);
-    cout<<" Rs. "<<money(dist);
+    cout<<" Rs. "<<money(d);
     delay(1000);
     gotoxy(72,12);
     cout<<"NO OF STATIONS : ";
@@ -256,12 +256,12 @@ void Path(float d,int e,int st,int inter)
       gotoxy(16,10);
       cout<<"AVERAGE TIME : ";
       gotoxy(32,10);
-      cout<<timetaken(dist)<<" MIN,";
+      cout<<timetaken(d)<<" MIN,";
       delay(1000);
       gotoxy(72,10);
       cout<<"AVERAGE FARE : Rs. ";
       gotoxy(91,10);
-      cout<<money(dist)<<",";
+      cout<<money(d)<<",";
       delay(1000);
       gotoxy(72,12);
       cout<<"NO OF STATIONS : ";
@@ -442,7 +442,7 @@ void secondWindow()
 void UI(){
 
     system("color 0A");
-    drawbox(1,0,117,29,5);
+    drawbox(1,0,117,29,4);
     system("color 0C");
     delay(90);
     system("color 0A");
@@ -450,8 +450,8 @@ void UI(){
     logo(37,4);
     system("color 0C");
     delay(90);
-    drawbox(30,3,87,11,5);
-    drawbox(28,2,89,12,5);
+    drawbox(30,3,87,11,4);
+    drawbox(28,2,89,12,4);
     system("color 0C");
     delay(90);
     system("color 0A");
@@ -536,8 +536,4 @@ int main()
     UI();
     //secondWindow();
     //take_input(graph);
-    /*Uncomment UI for accessing the introductory slide 
-      uncomment secondWindow and comment UI for debugging from the input part
-      This code is a private property of Chitrank Mishra. All Rights Reserved.
-      Understanding of the code is a necessacity before making any changes.*/
 }
