@@ -1,7 +1,6 @@
 #include <iostream>
-#include<stdio.h>
 #include <limits.h>
-#include<string.h>
+#include<string>
 #include<math.h>
 #include<cstdlib>
 #include<vector>
@@ -10,10 +9,6 @@
 #include<windows.h>
 using namespace std;
 const int V=248;
-struct node1
-    {
-        vector <float>p;
-    }P[V];
 struct station_code
 {
     string name;
@@ -22,6 +17,11 @@ struct station_code
 };
 struct station_code station[V];
 float graph[V][V];
+
+struct node1
+    {
+        vector <float>p;
+    }P[V];
 string makecapital(string str)
 {
     for(int i=0;i<str.length();i++)
@@ -31,6 +31,30 @@ string makecapital(string str)
     }
     return str;
 }
+void drawbox(int, int, int, int, int);
+void secondWindow();
+void clrscreen();
+void delay(unsigned int ms);
+void gotoxy(int x,int y);
+int timetaken(float dist);
+int money(float dist);
+void Details(int t);
+void Path(float dist,int e,int st);
+int minDistance(float dist[], bool sptSet[]);
+void dijkstra(float graph[V][V], int src,int targ);
+int printSolution(float dist[], int n,int src,int temp);
+void take_input();
+void logo(int x, int y);
+void secondWindow();
+void UI();
+
+COORD coord;
+void clrscreen()
+{
+    system("cls");
+    drawbox(1,0,117,29,0);
+}
+
 void delay(unsigned int ms)
 {
     clock_t goal=ms+clock();
@@ -100,14 +124,22 @@ int money(float dist)
         return 60;
 }
 
-void Path(float dist,int e,int st)
+void Details(int t)
+{
+   // cout<<"\nthe benchmark location present near "<<t<<"is: "<<details[t].near<<endl;
+}
+
+void Path(float d,int e,int st,int inter)
 {
     int t=e,s;
+    static float dist=0;
+    dist+=d;
+
     gotoxy(16,11);
     cout<<"THE SHORTEST PATH IS : ";
 
-    int pos_x=12;
-    int pos_y=15;
+    static int pos_x=12;
+    static int pos_y=15;
     vector <int> path;
     path.push_back(t);
     while(t!=st)
@@ -119,11 +151,13 @@ void Path(float dist,int e,int st)
     vector <int>::iterator i=path.end();
     string str;
     string color;
+    if(!inter){
     gotoxy(44,13);
     cout<<"****** LOADING ******";
     delay(2000);
     gotoxy(42,13);
     cout<<"****** ROUTE FOUND ******";
+    }
     vector<int>::iterator i2=path.end();
     i2--;
     int n_of_stations=0;
@@ -182,23 +216,65 @@ void Path(float dist,int e,int st)
         n_of_stations++;
         delay(700);
     }
+    if(!inter)
+    {
+      gotoxy(12,++pos_y);
+      cout<<"INTERMEDIATE STATION";
+      pos_y++;
+      pos_x=12;
+    }
+
+    if(inter){
     delay(1000);
     gotoxy(72,11);
-    cout<<"PATH LENGTH IS : "<<dist<<" KM";
+    cout<<"PATH LENGTH IS :";
+    gotoxy(97,11);
+    cout<<d<<" KM";
     delay(1000);
     gotoxy(16,10);
-    cout<<"AVERAGE TIME : "<<timetaken(dist)<<" MIN";
+    cout<<"AVERAGE TIME : ";
+    gotoxy(39,10);
+    cout<<timetaken(d)<<" MIN";
     delay(1000);
     gotoxy(72,10);
-    cout<<"AVERAGE FARE : Rs. "<<money(dist);
+    cout<<"AVERAGE FARE : ";
+    gotoxy(94,10);
+    cout<<" Rs. "<<money(dist);
     delay(1000);
     gotoxy(72,12);
-    cout<<"NO OF STATIONS : "<<n_of_stations-1;
+    cout<<"NO OF STATIONS : ";
+    gotoxy(92,12);
+    cout<<n_of_stations-1;
+    }
+    else{
+      delay(1000);
+      gotoxy(72,11);
+      cout<<"PATH LENGTH IS :";
+      gotoxy(89,11);
+      cout<<d<<" KM,";
+      delay(1000);
+      gotoxy(16,10);
+      cout<<"AVERAGE TIME : ";
+      gotoxy(32,10);
+      cout<<timetaken(dist)<<" MIN,";
+      delay(1000);
+      gotoxy(72,10);
+      cout<<"AVERAGE FARE : Rs. ";
+      gotoxy(91,10);
+      cout<<money(dist)<<",";
+      delay(1000);
+      gotoxy(72,12);
+      cout<<"NO OF STATIONS : ";
+      gotoxy(89,12);
+      cout<<n_of_stations-1<<",";
+    }
 
+    if(inter){
     delay(2500);
-    gotoxy(44,8);
+    gotoxy(44,9);
     cout<<"WANT TO SEARCH AGAIN ?  ";
     string choice;
+    pos_x=12; pos_y=15;
     cin>>choice;
     choice=makecapital(choice);
     if(choice=="Y"||choice=="YES")
@@ -207,12 +283,32 @@ void Path(float dist,int e,int st)
     char ch;
     scanf("%c",&ch);
     cout<<endl;
+  }
+  return;
 }
 
-
-void dijkstra(float graph[V][V], int src,int targ)
+int minDistance(float dist[], bool sptSet[])
 {
-    float dist[V];
+   // Initialize min value
+   float min = INT_MAX;
+   int min_index;
+
+   for (int v = 0; v < V; v++)
+     if (sptSet[v] == false && dist[v] <= min)
+         min = dist[v], min_index = v;
+
+   return min_index;
+}
+
+int printSolution(float dist[], int n,int src,int temp,int inter)
+{
+    Details(temp);
+    Path(dist[temp],temp,src,inter);
+}
+
+void dijkstra(float graph[V][V], int src,int targ,int inter)
+{
+     float dist[V];
      bool sptSet[V];
      for (int i = 0; i < V; i++)
         dist[i] = INT_MAX, sptSet[i] = false;
@@ -229,30 +325,40 @@ void dijkstra(float graph[V][V], int src,int targ)
                 P[v].p.push_back(u);
             }
      }
-     printSolution(dist, V,src,targ);
+     printSolution(dist, V,src,targ, inter);
 }
-
 
 void take_input()
 {
 
-        string start_s,end_s,line,col;
-        
+        string start_s,end_s,inter_s,line,col;
+        gotoxy(16,3);
         cout<<"ENTER THE STARTING STATION:";
-        
+        gotoxy(20,5);
         getline(cin,start_s);
-        cout<<"ENTER THE DESTINATION STATION:"
+        gotoxy(72,3);
+        cout<<"ENTER THE DESTINATION STATION:";
+        gotoxy(76,5);
         getline(cin,end_s);
+        gotoxy(42,6);
+        cout<<"ENTER THE INTERMEDIATE STATION:";
+        gotoxy(46,8);
+        getline(cin,inter_s);
+
+
 
         //for(int i=0;i<V;i++)
         //cout<<station[i].name<<" "<<station[i].code<<" "<<station[i].color<<endl;
 
         start_s=makecapital(start_s);
         end_s=makecapital(end_s);
+        inter_s=makecapital(inter_s);
 
-        int startcode,endcode;
-        int startflag=0,endflag=0;
-        for(int i=0;i<V;i++)
+        int startcode,endcode,intercode=-1;
+        int startflag=0,endflag=0,interflag1=0,interflag2=0;
+        if(inter_s!="NO")
+          interflag1=1;
+        for(int i=0;i<248;i++)
         {
             if(station[i].name==start_s)
             {
@@ -264,29 +370,104 @@ void take_input()
                 endcode=station[i].code;
                 endflag=1;
             }
+            if(interflag1&&station[i].name==inter_s)
+            {
+              intercode=station[i].code;
+              interflag2=1;
+            }
         }
-
+        int fault=0;
         if(startflag==0)
         {
+            gotoxy(42,10);
             cout<<"WRONG STARTING STATION NAME ENTERED";
             char ch;
             scanf("%c",&ch);
-            //secondWindow();
-            return;
+            fault=1;
         }
         if(endflag==0)
         {
+            gotoxy(40,11);
             cout<<"WRONG DESTINATION STATION NAME ENTERED";
             char ch;
             scanf("%c",&ch);
-            //secondWindow();
-            return;
+            fault=1;
         }
-         dijkstra(graph,startcode,endcode);
+        if(interflag1&&interflag2==0)
+        {
+            gotoxy(39,12);
+            cout<<"WRONG INTERMEDIATE STATION NAME ENTERED";
+            char ch;
+            scanf("%c",&ch);
+            fault=1;
+        }
+        if(fault)
+        {
+          secondWindow();
+          return;
+        }
+        if(interflag1){
+          dijkstra(graph,startcode,intercode,0);
+          dijkstra(graph,intercode,endcode,1);
+          }
+        else
+          dijkstra(graph, startcode,endcode,1);
 }
 
+void logo(int x, int y)
+{
+    gotoxy(x,y);
+    printf("   ___                     ___       ____");
+    gotoxy(x,y+1);
+    printf(" ||   \\\\   ||\\\\    //||  ||   \\\\   //    \\\\");
+    gotoxy(x,y+2);
+    printf(" ||    ||  || \\\\  // ||  ||    || ||");
+    gotoxy(x,y+3);
+    printf(" ||    ||  ||  \\\\//  ||  ||___//  ||");
+    gotoxy(x,y+4);
+    printf(" ||    ||  ||        ||  ||  \\\\   ||");
+    gotoxy(x,y+5);
+    printf(" ||___//   ||        ||  ||   \\\\   \\\\____//");
+    }
 
+void secondWindow()
+{
+    clrscreen();
+    gotoxy(48,19);
+    system("color 0C");
+    delay(90);
+    take_input();
+}
 
+void UI(){
+
+    system("color 0A");
+    drawbox(1,0,117,29,5);
+    system("color 0C");
+    delay(90);
+    system("color 0A");
+    delay(90);
+    logo(37,4);
+    system("color 0C");
+    delay(90);
+    drawbox(30,3,87,11,5);
+    drawbox(28,2,89,12,5);
+    system("color 0C");
+    delay(90);
+    system("color 0A");
+    delay(90);
+    gotoxy(42,14);
+    cout<<"WELCOME TO DELHI METRO DESKTOP APP";
+    system("color 0C");
+    delay(90);
+    system("color 0D");
+    delay(90);
+    gotoxy(47,18);
+    printf("PRESS ENTER TO CONTINUE");
+    char ch;
+    scanf("%c",&ch);
+    secondWindow();
+}
 
 int main()
 {
@@ -296,14 +477,16 @@ int main()
     fin.open("node_values_new.txt");
 /*     while (fin) {
 
-        getline(fin, line);                                     // Read a Line from File
+        // Read a Line from File
+        getline(fin, line);
 
-        cout << line << endl;                                   // Print line in Console
+        // Print line in Console
+        cout << line << endl;
     }
 */
-    for(int i=0;i<V;i++)
+    for(int i=0;i<248;i++)
     {
-       for(int j=0;j<V;j++)
+       for(int j=0;j<248;j++)
         graph[i][j]=0;
     }
     for(int i=1;i<=V;i++)
@@ -350,7 +533,7 @@ int main()
         }
         matrix<<endl;
     }*/
-    //UI();
+    UI();
     //secondWindow();
     //take_input(graph);
 }
