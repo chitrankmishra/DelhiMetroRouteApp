@@ -39,7 +39,7 @@ void gotoxy(int x,int y);
 int timetaken(float dist);
 int money(float dist);
 void Details(int t);
-void Path(float dist,int e,int st);
+void Path(float dist,int e,int st,int inter);
 int minDistance(float dist[], bool sptSet[]);
 void dijkstra(float graph[V][V], int src,int targ);
 int printSolution(float dist[], int n,int src,int temp);
@@ -289,7 +289,6 @@ void Path(float d,int e,int st,int inter)
 
 int minDistance(float dist[], bool sptSet[])
 {
-   // Initialize min value
    float min = INT_MAX;
    int min_index;
 
@@ -327,10 +326,46 @@ void dijkstra(float graph[V][V], int src,int targ,int inter)
      }
      printSolution(dist, V,src,targ, inter);
 }
-
+int lcs( string X,string Y ) 
+{ 
+	int m=X.length();
+	int n=Y.length();
+   int L[m+1][n+1]; 
+   int i, j; 
+   
+   for (i=0; i<=m; i++) 
+   { 
+     for (j=0; j<=n; j++) 
+     { 
+       if (i == 0 || j == 0) 
+         L[i][j] = 0; 
+   
+       else if (X[i-1] == Y[j-1]) 
+         L[i][j] = L[i-1][j-1] + 1; 
+   
+       else
+         L[i][j] = max(L[i-1][j], L[i][j-1]); 
+     } 
+   } 
+   return L[m][n]; 
+} 
+int sameMatch(string s){
+	int max=0,maxi=-1;
+	for(int i=0;i<248;i++){
+		int val=lcs(s,station[i].name);
+		if(val>max){
+			maxi=station[i].code;
+			max=val;
+		}
+	}
+	if(max<station[maxi].name.length()/2)
+		return -1;
+	return maxi;
+}
 void take_input()
-{
-
+{		
+		char ch;
+		//scanf("%c",&ch);
         string start_s,end_s,inter_s,line,col;
         gotoxy(16,3);
         cout<<"ENTER THE STARTING STATION:";
@@ -358,7 +393,16 @@ void take_input()
         int startflag=0,endflag=0,interflag1=0,interflag2=0;
         if(!(inter_s=="NO"||inter_s=="N"))
           interflag1=1;
-        for(int i=0;i<248;i++)
+        startcode=sameMatch(start_s);
+        endcode=sameMatch(end_s);
+        intercode=sameMatch(inter_s);
+        if(startcode==-1)
+        	startflag=1;
+        if(endcode==-1)
+        	endflag=1;
+        if(endcode==-1)
+        	interflag2=1;
+        /*for(int i=0;i<248;i++)
         {
             if(station[i].name==start_s)
             {
@@ -375,32 +419,28 @@ void take_input()
               intercode=station[i].code;
               interflag2=1;
             }
-        }
+        }*/
         int fault=0;
-        if(startflag==0)
+        if(startflag==1)
         {
             gotoxy(42,10);
             cout<<"WRONG STARTING STATION NAME ENTERED";
-            char ch;
-            scanf("%c",&ch);
             fault=1;
         }
-        if(endflag==0)
+        if(endflag==1)
         {
             gotoxy(40,11);
             cout<<"WRONG DESTINATION STATION NAME ENTERED";
-            char ch;
-            scanf("%c",&ch);
             fault=1;
         }
-        if(interflag1&&interflag2==0)
+        if(interflag1&&interflag2==1)
         {
             gotoxy(39,12);
             cout<<"WRONG INTERMEDIATE STATION NAME ENTERED";
-            char ch;
-            scanf("%c",&ch);
             fault=1;
         }
+        //ch;
+        scanf("%c",&ch);    
         if(fault)
         {
           secondWindow();
@@ -537,10 +577,5 @@ int main()
     //secondWindow();
     //take_input(graph);
     /*Uncomment UI for accessing the introductory slide 
-      uncomment secondWindow and comment UI for debugging from the input part
-      This code is a private property of Chitrank Mishra. All Rights Reserved.
-      Understanding of the code is a necessacity before making any changes.*/
+      uncomment secondWindow and comment UI for debugging from the input part*/
 }
-
-
-// Random PR 2
