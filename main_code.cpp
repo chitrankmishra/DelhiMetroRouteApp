@@ -298,6 +298,18 @@ int minDistance(float dist[], bool sptSet[])
 
    return min_index;
 }
+bool contains(TreeNode* root)
+    {
+        if(root==NULL)
+            return false;
+        else
+        {bool a=contains(root->left);
+         bool b=contains(root->right);
+         if(!a) root->left=NULL;
+         if(!b) root->right=NULL;
+            return root->val==1 ||a||b;
+            }
+    }
 
 int printSolution(float dist[], int n,int src,int temp,int inter)
 {
