@@ -29,7 +29,7 @@ string makecapital(string str)
         if(str[i]>96&&str[i]<123)
             str[i]=str[i]-32;
     }
-    return str;
+    return str;//jai mata di
 }
 void drawbox(int, int, int, int, int);
 void secondWindow();
