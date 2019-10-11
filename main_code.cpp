@@ -10,7 +10,7 @@
 using namespace std;
 const int V=248;
 struct station_code
-{
+{ //unique for each
     string name;
     int code;
     string color;
