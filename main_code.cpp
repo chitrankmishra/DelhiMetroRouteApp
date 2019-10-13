@@ -36,6 +36,8 @@ void secondWindow();
 void clrscreen();
 void delay(unsigned int ms);
 void gotoxy(int x,int y);
+
+vgftvbbjh maa ka bharosa
 int timetaken(float dist);
 int money(float dist);
 void Details(int t);
